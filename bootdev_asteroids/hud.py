@@ -11,4 +11,4 @@ def draw_hud(screen, score: int, health: int, i_frame: float):
 
     screen.blit(score_text, (20, 20))
     screen.blit(health_text, (20, 55))
-    screen.blit(invul_text, (20, 80))
+    screen.blit(invul_text, (20, 90))

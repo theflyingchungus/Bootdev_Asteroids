@@ -10,6 +10,7 @@ from circleshape import CircleShape
 from constants import (
     ASTEROID_DAMAGE,
     INVUL_TIME,
+    SCORE_ON_HIT,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
     STARTING_HEALTH,
@@ -69,7 +70,9 @@ def main():
             for asteroid in asteroids:
                 if asteroid.collides_with(player):
                     # First collision detected! Trigger on_hit immediately
-                    player_health, invul_timer = on_hit(player_health, asteroid_damage)
+                    player_health, invul_timer = on_hit(
+                        player_health, asteroid_damage, player_score
+                    )
                     break  # Stop checking other asteroids this frame since we were hit
 
         for asteroid in asteroids:
@@ -78,6 +81,7 @@ def main():
                     log_event("asteroid_shot")
                     shot.kill()
                     asteroid.split()
+                    player_score += SCORE_ON_HIT
 
         screen.fill("black")
 
