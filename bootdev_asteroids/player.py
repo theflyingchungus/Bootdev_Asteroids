@@ -18,6 +18,8 @@ class Player(CircleShape):
     def __init__(self, x: float, y: float) -> None:
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation: float = 0.0
+        self.color: str = "white"
+        self.hit_timer: float = 0.0
         self.shot_cd: float = 0.0
 
     def triangle(self) -> list[pygame.Vector2]:
@@ -30,7 +32,7 @@ class Player(CircleShape):
 
     @override
     def draw(self, screen: pygame.Surface) -> None:
-        pygame.draw.polygon(screen, "white", self.triangle(), LINE_WIDTH)
+        pygame.draw.polygon(screen, self.color, self.triangle(), LINE_WIDTH)
 
     def rotate(self, dt: float) -> None:
         self.rotation += PLAYER_TURN_SPEED * dt
@@ -48,6 +50,10 @@ class Player(CircleShape):
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
 
+    def take_hit(self):
+        self.color = "red"
+        self.hit_timer = 2.0
+
     @override
     def update(self, dt: float) -> None:
         self.shot_cd = max(0, self.shot_cd - dt)
@@ -63,3 +69,8 @@ class Player(CircleShape):
             self.move(-dt)
         if keys[pygame.K_SPACE]:
             self.shoot()
+
+        if self.hit_timer > 0:
+            self.hit_timer -= dt
+            if self.hit_timer <= 0:
+                self.color = "white"

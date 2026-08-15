@@ -70,6 +70,7 @@ def main():
             for asteroid in asteroids:
                 if asteroid.collides_with(player):
                     # First collision detected! Trigger on_hit immediately
+                    player.take_hit()
                     player_health, invul_timer = on_hit(
                         player_health, asteroid_damage, player_score
                     )
