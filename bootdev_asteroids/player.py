@@ -11,6 +11,8 @@ from constants import (
     PLAYER_SHOOT_SPEED,
     PLAYER_SPEED,
     PLAYER_TURN_SPEED,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
 )
 from shot import Shot
 
@@ -75,3 +77,10 @@ class Player(CircleShape):
             self.hit_timer -= dt
             if self.hit_timer <= 0:
                 self.color = "white"
+
+        # Update position with velocity/movement first
+        self.position += self.velocity * dt
+
+        # Wrap coordinates
+        self.position.x = self.position.x % SCREEN_WIDTH
+        self.position.y = self.position.y % SCREEN_HEIGHT
