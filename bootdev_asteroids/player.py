@@ -4,6 +4,7 @@ import pygame
 
 from circleshape import CircleShape
 from constants import (
+    INVUL_TIME,
     LINE_WIDTH,
     PLAYER_RADIUS,
     PLAYER_SHOOT_COOLDOWN_SECONDS,
@@ -52,7 +53,7 @@ class Player(CircleShape):
 
     def take_hit(self):
         self.color = "red"
-        self.hit_timer = 2.0
+        self.hit_timer = INVUL_TIME
 
     @override
     def update(self, dt: float) -> None:
@@ -70,7 +71,7 @@ class Player(CircleShape):
         if keys[pygame.K_SPACE]:
             self.shoot()
 
-        if self.hit_timer > 0:
+        if self.hit_timer > 0.0:
             self.hit_timer -= dt
             if self.hit_timer <= 0:
                 self.color = "white"
