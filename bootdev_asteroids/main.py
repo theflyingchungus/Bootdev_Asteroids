@@ -4,6 +4,7 @@ from threading import currentThread
 import pygame
 from pygame.time import Clock
 
+import sounds
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from circleshape import CircleShape
@@ -26,6 +27,7 @@ from shot import Shot
 
 def main():
     pygame.init()
+    sounds.init_sounds()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
@@ -74,9 +76,7 @@ def main():
                 if asteroid.collides_with(player):
                     # First collision detected! Trigger on_hit immediately
                     player.take_hit()
-                    player_health, invul_timer = on_hit(
-                        player_health, asteroid_damage, player_score, high_score
-                    )
+                    player_health, invul_timer = on_hit(player_health, asteroid_damage)
                     break  # Stop checking other asteroids this frame since we were hit
 
         for asteroid in asteroids:
@@ -85,10 +85,18 @@ def main():
                     log_event("asteroid_shot")
                     shot.kill()
                     asteroid.split()
+                    sounds.break_sound.play()
                     player_score += SCORE_ON_HIT
                     if player_score > high_score:
                         high_score = player_score
                         save_high_score(high_score)
+
+        if player_health <= 0:
+            print(f"You scored {player_score} points!")
+            if player_score >= high_score:
+                print("Congratulations! A new high score!")
+            print("Game over!")
+            sys.exit()
 
         screen.fill("black")
 

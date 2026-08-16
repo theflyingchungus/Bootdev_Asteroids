@@ -2,6 +2,7 @@ from typing import override
 
 import pygame
 
+import sounds
 from circleshape import CircleShape
 from constants import (
     INVUL_TIME,
@@ -52,6 +53,8 @@ class Player(CircleShape):
         self.shot_cd = PLAYER_SHOOT_COOLDOWN_SECONDS
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+        # Play the shot sound
+        sounds.shoot_sound.play()
 
     def take_hit(self):
         self.color = "red"
